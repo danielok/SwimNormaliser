@@ -15,14 +15,26 @@ if (!Directory.Exists(sampleFilesDirectory))
 }
 else
 {
-    
-    var firstActivityIds = TcxFileReader.GetFirstActivityIds(sampleFilesDirectory);
-    foreach (var kvp in firstActivityIds)
+
+    var tcxFiles = Directory.GetFiles(sampleFilesDirectory, "*.tcx");
+
+
+    foreach (var file in tcxFiles)
     {
-        Console.WriteLine($"File: {kvp.Key}, First Activity ID: {kvp.Value}");
+        Console.WriteLine($"Processing file: {Path.GetFileName(file)}");
+
+
+        var average = TcxFileReader.GetAverageLapSpeed(file);
+            Console.WriteLine("Average Lap Speed: " + average + " m/s");
+
+        TcxFileReader.GetLapDistancesAndTimes(file)
+            .ForEach(lap => Console.WriteLine($"Distance: {lap.DistanceMeters} m \t\t Time: {lap.TotalTimeSeconds} s"));
+
+        Console.WriteLine("\n--------------------------------------------------\n");
+
     }
 }
 
-Console.WriteLine("Press any key to exit...");
-Console.ReadLine();
+//Console.WriteLine("Press any key to exit...");
+//Console.ReadLine();
 Console.WriteLine("Exiting...");
